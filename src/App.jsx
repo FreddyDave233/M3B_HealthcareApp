@@ -1,9 +1,11 @@
-import './App.css'
+import { Provider } from "react-redux";
+import store from "./store";
+import Dashboard from "./pages/Users/Dashboard";
 
 export default function App() {
   return (
-    <main>
-      React ⚛️ + Vite ⚡ + Replit
-    </main>
+    <Provider store={store}>
+      <Dashboard />
+    </Provider>
   )
 }
