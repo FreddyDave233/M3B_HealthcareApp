@@ -1,22 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API = "https://337ab5a7-c6df-461e-86e1-22ffc8fb245e-00-3ana08belj2ke.pike.replit.dev";
+const API = "https://813738f5-8157-4148-bb93-c9ebb383004c-00-3733mawds3sri.sisko.replit.dev";
 
 //===================================================
 
 //Create User
 export const createUser = createAsyncThunk(
     "users/createUser",
-    async () => {
+    async ({name, phone, email, age, gender, address, birthDate}) => {
         const database = {
-            user_name: "DoubleDavid",
-            user_phone: "000-7555-324",
-            user_email: "david@david.com",
-            user_age: 18,
-            user_gender: "Female",
-            user_address: "unknown, 32/112 51000 Wakanda",
-            user_birth_date: "2000-01-01"
+            user_name: name,
+            user_phone: phone,
+            user_email: email,
+            user_age: age,
+            user_gender: gender,
+            user_address: address,
+            user_birth_date: birthDate
         };
 
         const res = await axios.post(`${API}/users`, database);
@@ -62,17 +62,19 @@ export const fetchPatients = createAsyncThunk(
 //Update Personal detail
 export const updateUserDetail = createAsyncThunk(
     "users/updateUserDetail",
-    async ({name, phone, email, address}) => {
+    async () => {
         // const userId = decode.id;
 
         const database = {
-            user_name:name,
-            user_phone: phone,
-            user_email: email,
-            user_address: address,
+            user_name: "Jobiden",
+            user_phone: "000",
+            user_email: "no more",
+            user_address: "goner",
         };
 
-        const res = await axios.put(`${API}/users/detail/${userID}`, database);
+        const userId = 15;
+        const res = await axios.put(`${API}/users/detail/${userId}`, database);
+        console.log(res.data);
         return res.data;
     }
 )
@@ -100,6 +102,7 @@ export const removeUserDetail = createAsyncThunk(
     async () => {
         // const userId = decode.id;
 
+        const userID = 15;
         const res = await axios.delete(`${API}/users/${userID}`);
         return res.data;
     }
@@ -114,6 +117,8 @@ const usersSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(createUser.fulfilled, (state, action) => {
             state.users = action.payload;
+            // state.users = [...state.users, action.payload];
+            console.log(state.users);
         })
         .addCase(fetchAllUsers.fulfilled, (state, action) => {
             state.users = action.payload;
