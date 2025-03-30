@@ -6,7 +6,7 @@ import apptsReducer from "./features/apptsSlice";
 const store = configureStore({
     reducer: {
         users: usersReducer,
-        stuffs: stuffsReducer,
+        stuffsData: stuffsReducer,
         appointments: apptsReducer,
     },
 });

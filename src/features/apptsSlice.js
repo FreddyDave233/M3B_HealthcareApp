@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API = "https://813738f5-8157-4148-bb93-c9ebb383004c-00-3733mawds3sri.sisko.replit.dev";
+const API = "https://425b0681-6d67-4258-837b-4ef9dc7bc8ab-00-2fi27jczr1g9d.pike.replit.dev";
 
 //===================================================
 

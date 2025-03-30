@@ -1,25 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API = "https://813738f5-8157-4148-bb93-c9ebb383004c-00-3733mawds3sri.sisko.replit.dev";
+const API = "https://425b0681-6d67-4258-837b-4ef9dc7bc8ab-00-2fi27jczr1g9d.pike.replit.dev";
 
 //===================================================
 
 //Create Stuff
 export const createStuff = createAsyncThunk(
     "stuffs/createStuff",
-    async () => {
+    async ({name, phone, email, age, gender, address, birthDate, position, specialist, department}) => {
         const database = {
-            stuff_name: "dsa",
-            stuff_address: "",
-            stuff_phone: "",
-            stuff_email: "",
-            stuff_age: "",
-            stuff_gender: "",
-            stuff_birth_date: "",
-            stuff_position: "",
-            stuff_specialist: "",
-            stuff_department: "",
+            stuff_name: name,
+            stuff_address: address,
+            stuff_phone: phone,
+            stuff_email: email,
+            stuff_age: age,
+            stuff_gender: gender,
+            stuff_birth_date: birthDate,
+            stuff_position: position,
+            stuff_specialist: specialist,
+            stuff_department: department,
         };
 
         const res = await axios.post(`${API}/stuffs`, database);
@@ -40,10 +40,11 @@ export const fetchAllStuff = createAsyncThunk(
 //GET Stuff detail (Do we need it? As we can used fetchAllStuff and set the true id)
 export const fetchStuff = createAsyncThunk(
     "stuffs/fetchStuff",
-    async () => {
+    async (email) => {
         // const userId = decode.id;
-
-        const res = await fetch(`${API}/stuffs/${stuffID}`);
+        console.log("Fetch stuff id", email);
+        
+        const res = await fetch(`${API}/stuffs/${email}`);
         const userDetail = await res.json();
         return userDetail;
     }

@@ -2,7 +2,8 @@ import { createUser, fetchAllUsers, fetchUserDetail, fetchPatients, updateUserDe
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-import NewUser from "../../components/NewUser";
+import Signup from "../Registraction/Signup";
+import UserDetail from "../Users/UserDetail";
 
 //Workable //Need Difference between array or non-array
 const UsersDetail = () => {
@@ -71,11 +72,8 @@ const Dashboard = () => {
 
   return (
     < >
-      <h1>User Dashboard</h1>
+      {/* <h1>User Dashboard</h1>
       <hr/>
-
-      <NewUser />
-      <hr />
 
       <UpdateUser />
       <hr />
@@ -83,7 +81,8 @@ const Dashboard = () => {
       <DeleteUser />
       <hr />
       
-      <UsersDetail />
+      <UsersDetail /> */}
+      <UserDetail isMonitor={false} userID={0}/>
     </>
   )
 };
