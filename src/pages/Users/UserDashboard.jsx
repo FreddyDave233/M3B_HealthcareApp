@@ -59,7 +59,7 @@ const UserDashboard = () => {
     if (appts.length !== 0 && user.length !== 0)
       setCurrentAppt(appts.filter((data) => data.user_id === user[0].id));
     
-  }, [appts])
+  }, [appts, user])
   
   return (
     <Row>
