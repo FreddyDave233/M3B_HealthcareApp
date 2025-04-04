@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API = "https://a2e6113e-fa94-4c4a-b581-397d98296af3-00-dhejob97s4n1.sisko.replit.dev";
+const API = "https://healthcare-api-liard.vercel.app";
 
 //===================================================
 

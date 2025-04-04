@@ -6,7 +6,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { db, storage } from "../firebase";
 
 const API =
-    "https://a2e6113e-fa94-4c4a-b581-397d98296af3-00-dhejob97s4n1.sisko.replit.dev";
+    "https://healthcare-api-liard.vercel.app";
 
 //===================================================
 
