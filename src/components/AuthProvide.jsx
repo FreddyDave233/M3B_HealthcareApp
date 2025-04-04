@@ -1,10 +1,12 @@
 import { createContext, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../firebase";
 
 export const AuthContext = createContext();
 export const RoleContext = createContext();
 
 export function AuthProvider({ children }) {
+  // const user = use
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 

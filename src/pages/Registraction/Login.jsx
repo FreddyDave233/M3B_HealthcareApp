@@ -1,44 +1,30 @@
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
-import { AuthContext, RoleContext } from "../../components/AuthProvide";
+import { AuthContext } from "../../components/AuthProvide";
 
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { useContext, useState, useEffect } from "react";
-import { fetchStuff } from "../../features/stuffsSlice";
-import { fetchUserDetail } from "../../features/usersSlice";
+
+import { Form, Button } from "react-bootstrap";
+
+const isHealthcareEmail = (email) => {
+  return email.endsWith("@healthcare.com");
+}
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { currentUser } = useContext(AuthContext);
-  const { isStuff } = useContext(RoleContext) || "";
+  const { currentUser } = useContext(AuthContext) || null;
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const auth = getAuth();
-  
-  const stuff = useSelector((state) => state.stuffsData.stuffs);
-  const user = useSelector((state) => state.users.users);
-
-  const handleLogout = () => auth.signOut(); //Remove
 
   useEffect(() => {
-    console.log(currentUser);
-    
-    if (currentUser && isStuff) {
-      if (stuff.length === 0)
-        dispatch(fetchStuff(currentUser.email));
-
-      console.log("Moving to stuff");
-      navigate("/stuffs");
+    if (currentUser && isHealthcareEmail(currentUser.email)) {
+      navigate("/stuffDashboard");
     }
 
-    if (currentUser && !isStuff) {
-      if (user.length === 0)
-        dispatch(fetchUserDetail(currentUser.email));
-
-      console.log("Moving to user");
-      navigate("/users");
+    if (currentUser && !isHealthcareEmail(currentUser.email)) {
+      navigate("/userDashboard");
     }
   }, [currentUser])
 
@@ -52,19 +38,24 @@ const Login = () => {
     }
   }
 
+  const NavigateSignup = () => {
+    navigate("/signup");
+  }
+  
   return (
     < >
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <label>Email</label>
-        <input type="text" onChange={(e) => setEmail(e.target.value)}/>
+      <h1 className="mb-4">Login your account</h1>
+      <Form onSubmit={handleLogin}>
+        <Form.Label>Email</Form.Label>
+        <Form.Control type="text" onChange={(e) => setEmail(e.target.value)}/>
         
-        <label>Password</label>
-        <input type="text" onChange={(e) => setPassword(e.target.value)}/>
+        <Form.Label>Password</Form.Label>
+        <Form.Control type="password" onChange={(e) => setPassword(e.target.value)}/>
 
-        <button type="submit">Submit</button>
-      </form>
-      <button onClick={handleLogout}>Logout</button>
+        <Button className="mt-4 w-100" type="submit">Login</Button>
+      </Form>
+
+      <p className="mt-2">Don't have an account? <a style={{ color: "blue", cursor: "pointer"}} onClick={NavigateSignup}>Signup</a></p>
     </>
   )
 }

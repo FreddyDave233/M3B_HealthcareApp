@@ -1,89 +1,117 @@
-import { createUser, fetchAllUsers, fetchUserDetail, fetchPatients, updateUserDetail, updateUserHealth, removeUserDetail } from "../../features/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../components/AuthProvide";
 
-import Signup from "../Registraction/Signup";
-import UserDetail from "../Users/UserDetail";
+import { fetchAllStuffs } from "../../features/stuffsSlice";
+import { fetchAllAppts } from "../../features/apptsSlice";
+import { fetchUserDetail, fetchUserProfile } from "../../features/usersSlice";
 
-//Workable //Need Difference between array or non-array
-const UsersDetail = () => {
-  const allUser = useSelector((state) => state.users.users);
+import NewAppts from "../../components/NewAppts";
+import ApptsModal from "../../components/ApptsModal";
+
+import { Table, Col, Row, Button, Card } from "react-bootstrap";
+
+const Dashboard = () => {
+  const [apptId, setApptId] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [showApptModal, setShowApptModal] = useState(false);
+  const [currentAppt, setCurrentAppt] = useState([]);
+  
+  let stuffs = useSelector((state) => state.stuffsData.stuffs);
+  let appts = useSelector((state) => state.appointments.appts);
+  let profile = useSelector((state) => state.users.profile);
+  const user = useSelector((state) => state.users.users);
+  const { currentUser } = useContext(AuthContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchAllUsers());
-  }, [dispatch]);
+    if (user.length === 0) {
+      dispatch(fetchUserDetail(currentUser.email));
+    }
 
-  return (
-    < >
-      <h1>ALL USER DETAIL</h1>
-      {Array.isArray(allUser) 
-        ? (allUser.map((user) => (
-          <ul key={user.id}>
-            <li>{user.username}</li>
-            <li>{user.age}</li>
-            <li>{user.gender}</li>
-          </ul>
-        ))) : (
-          <ul>
-            <li>{allUser.username}</li>
-            <li>{allUser.age}</li>
-            <li>{allUser.gender}</li>
-          </ul>
-        )
-      }
-    </>
-  )
-}
+    if (profile.length === 0) {
+      dispatch(fetchUserProfile());
+    }
 
-const DeleteUser = () => {
-  const dispatch = useDispatch();
+    if (stuffs.length === 0) {
+      dispatch(fetchAllStuffs());
+    }
 
-  const handleDelete =  async (e) => {
-    e.preventDefault();
-    dispatch(removeUserDetail());
-  }
+    if (appts.length === 0) {
+      dispatch(fetchAllAppts());
+    }
 
-  return (
-    < >
-      <h1>Delete SECTION</h1>
-      <button onClick={handleDelete}>Delete User</button>
-    </>
-  )
-}
-
-const UpdateUser = () => {
-  const dispatch = useDispatch();
-
-  const handleUpdate =  async (e) => {
-    e.preventDefault();
-    dispatch(updateUserDetail());
-  }
-
-  return (
-    < >
-      <h1>UPDATE SECTION</h1>
-      <button onClick={handleUpdate}>Update User</button>
-    </>
-  )
-}
-
-const Dashboard = () => {
-
-  return (
-    < >
-      {/* <h1>User Dashboard</h1>
-      <hr/>
-
-      <UpdateUser />
-      <hr />
+    if (user.length !== 0 && user[0].email !== currentUser.email) {
+      console.log("Fetching ", user[0].email);
+      stuffs = [];
+      appts = [];
+      profile = [];
+      setCurrentAppt([]);
       
-      <DeleteUser />
-      <hr />
+      dispatch(fetchUserDetail(currentUser.email));
+      dispatch(fetchUserProfile());
+      dispatch(fetchAllStuffs());
+      dispatch(fetchAllAppts());
+    }
+  }, [user, dispatch])
+
+  useEffect(() => {
+    if (appts.length !== 0)
+      setCurrentAppt(appts.filter((data) => data.user_id === user[0].id));
+    
+  }, [appts])
+  
+  return (
+    <Row>
+      <Col>
+        <h1 className="mb-3">Upcoming Appointment</h1>
+        {currentAppt.map((data, index) => (
+          <Card key={index} className="mb-3" style={{ width: '24rem' }}>
+            <Card.Body>
+              <h4>{data.servicetype} at {data.apptdate.split("T")[0]}</h4>
+              <p>Appointment time: {data.appttime}</p>
+              <Button key={index} className="w-100" onClick={() => {setShowApptModal(true); setApptId(data.id)}}>
+                Open more
+              </Button>
+            </Card.Body>
+          </Card>
+        ))}
+      </Col>
       
-      <UsersDetail /> */}
-      <UserDetail isMonitor={false} userID={0}/>
-    </>
+      
+      <Col>
+        {stuffs.length == 0 ? <p>Can't book appointment, without doctor exist</p> : (<>
+          <h1 className="mb-3">Book Appointment</h1>
+          <Button onClick={() => setShowModal(true)}>Book an Appointment</Button>
+          <hr/>
+          <h2>Doctor</h2>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th className="fs-6">#</th>
+                <th className="fs-6">Name</th>
+                <th className="fs-6">Age</th>
+                <th className="fs-6">Position</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stuffs.map((stuff, index) => 
+                  <tr key={stuff.id}>
+                    <td className="fs-6">{index + 1}</td>
+                    <td className="fs-6">{stuff.stuffname}</td>
+                    <td className="fs-6">{stuff.age}</td>
+                    <td className="fs-6">{stuff.stuffposition}</td>
+                  </tr>
+                )
+              }
+            </tbody>
+          </Table>
+        </>)}
+      </Col>
+
+      {showModal && <NewAppts show={showModal} handleClose={() => setShowModal(false)}/>}
+      {showApptModal && <ApptsModal show={showApptModal} handleClose={() => setShowApptModal(false)} appointmentData={appts.find(data => data.id === apptId)} />}
+    </Row>
   )
 };
 
