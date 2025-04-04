@@ -11,7 +11,7 @@ import ApptsModal from "../../components/ApptsModal";
 
 import { Table, Col, Row, Button, Card } from "react-bootstrap";
 
-const Dashboard = () => {
+const UserDashboard = () => {
   const [apptId, setApptId] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [showApptModal, setShowApptModal] = useState(false);
@@ -56,7 +56,7 @@ const Dashboard = () => {
   }, [user, dispatch])
 
   useEffect(() => {
-    if (appts.length !== 0)
+    if (appts.length !== 0 && user.length !== 0)
       setCurrentAppt(appts.filter((data) => data.user_id === user[0].id));
     
   }, [appts])
@@ -115,4 +115,4 @@ const Dashboard = () => {
   )
 };
 
-export default Dashboard;
+export default UserDashboard;
