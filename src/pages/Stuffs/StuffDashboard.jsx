@@ -25,19 +25,21 @@ const StuffDashboard = () => {
     if (!users || users.length === 0)
       dispatch(fetchAllUsers());
 
-    if (personal && personal.length !== 0 && personal[0].email !== currentUser.email) {
-      console.log("Refetch all stuff");
-      dispatch(fetchStuff(currentUser.email));
-      dispatch(fetchAllStuffs());
-      dispatch(fetchAllUsers());
+    if (currentUser != null) {
+      if (personal.length !== 0 && personal[0].email !== currentUser.email) {
+        console.log("Refetch all stuff");
+        dispatch(fetchStuff(currentUser.email));
+        dispatch(fetchAllStuffs());
+        dispatch(fetchAllUsers());
+      }
     }
   }, [personal, dispatch])
-
+  
   return (
     <>
       {/* Column Main - All Patient */}
       <h1>Patient Dashboard</h1>
-      {users.length == 0 ? <p>No patient</p> :
+      {(users.length == 0 && personal.length == 0) ? <p>No patient</p> :
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -50,7 +52,7 @@ const StuffDashboard = () => {
           
           <tbody>
             {users.map((data, index) => {
-              if (data.stuff_id === personal.id)
+              if (data.stuff_id === personal[0].id)
                 return (< ></>);
       
               return (
@@ -70,7 +72,7 @@ const StuffDashboard = () => {
       
       {/* Column Aside - Other Collegue (bottom) + Calender (top) */}
       <h2>Collegue</h2>
-      {stuffs.length == 0 ? <p>No other doctor</p> : (<>
+      {(stuffs.length == 0 && personal.length == 0) ? <p>No other doctor</p> : (<>
         <Table striped bordered hover>
           <thead>
             <tr>
