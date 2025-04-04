@@ -16,16 +16,16 @@ const StuffDashboard = () => {
   const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
-    if (personal.length === 0)
+    if (!personal || personal.length === 0)
       dispatch(fetchStuff(currentUser.email));
 
-    if (stuffs.length === 0)
+    if (!stuffs || stuffs.length === 0)
       dispatch(fetchAllStuffs());
 
-    if (users.length === 0)
+    if (!users || users.length === 0)
       dispatch(fetchAllUsers());
 
-    if (personal.length !== 0 && personal[0].email !== currentUser.email) {
+    if (personal && personal.length !== 0 && personal[0].email !== currentUser.email) {
       console.log("Refetch all stuff");
       dispatch(fetchStuff(currentUser.email));
       dispatch(fetchAllStuffs());

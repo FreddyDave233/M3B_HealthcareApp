@@ -17,31 +17,31 @@ const Dashboard = () => {
   const [showApptModal, setShowApptModal] = useState(false);
   const [currentAppt, setCurrentAppt] = useState([]);
   
-  let stuffs = useSelector((state) => state.stuffsData.stuffs);
-  let appts = useSelector((state) => state.appointments.appts);
-  let profile = useSelector((state) => state.users.profile);
+  let stuffs = useSelector((state) => state.stuffsData.stuffs) || [];
+  let appts = useSelector((state) => state.appointments.appts) || [];
+  let profile = useSelector((state) => state.users.profile) || [];
   const user = useSelector((state) => state.users.users);
   const { currentUser } = useContext(AuthContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user.length === 0) {
+    if (!user || user.length === 0) {
       dispatch(fetchUserDetail(currentUser.email));
     }
 
-    if (profile.length === 0) {
+    if (profile || profile.length === 0) {
       dispatch(fetchUserProfile());
     }
 
-    if (stuffs.length === 0) {
+    if (!stuffs || stuffs.length === 0) {
       dispatch(fetchAllStuffs());
     }
 
-    if (appts.length === 0) {
+    if (!appts || appts.length === 0) {
       dispatch(fetchAllAppts());
     }
 
-    if (user.length !== 0 && user[0].email !== currentUser.email) {
+    if (user && user.length !== 0 && user[0].email !== currentUser.email) {
       console.log("Fetching ", user[0].email);
       stuffs = [];
       appts = [];
@@ -65,7 +65,7 @@ const Dashboard = () => {
     <Row>
       <Col>
         <h1 className="mb-3">Upcoming Appointment</h1>
-        {currentAppt.map((data, index) => (
+        {currentAppt.length != 0 && currentAppt.map((data, index) => (
           <Card key={index} className="mb-3" style={{ width: '24rem' }}>
             <Card.Body>
               <h4>{data.servicetype} at {data.apptdate.split("T")[0]}</h4>

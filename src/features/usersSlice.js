@@ -79,7 +79,7 @@ export const fetchUserProfile = createAsyncThunk(
     "users/fetchUserProfile",
     async () => {
         try {
-            const postsRef = collection(db, "users"); // Reference to the global "posts" collection
+            const postsRef = collection(db, "users");
             const querySnapshot = await getDocs(postsRef);
 
             const docs = querySnapshot.docs.map((doc) => (
