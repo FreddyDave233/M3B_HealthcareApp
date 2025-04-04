@@ -14,6 +14,7 @@ const StuffDashboard = () => {
   const dispatch = useDispatch();
 
   const { currentUser } = useContext(AuthContext);
+  const currentStuff = personal?.[0];
 
   useEffect(() => {
     if (!personal || personal.length === 0)
@@ -52,7 +53,7 @@ const StuffDashboard = () => {
           
           <tbody>
             {users.map((data, index) => {
-              if (data.stuff_id === personal[0].id)
+              if (currentStuff && data.stuff_id === currentStuff.id)
                 return (< ></>);
       
               return (
@@ -84,7 +85,7 @@ const StuffDashboard = () => {
           </thead>
           <tbody>
             {stuffs.map((stuff, index) => {
-              if (stuff.id === personal[0].id)
+              if (currentStuff && stuff.id === currentStuff.id)
                 return (<></>)
                   
               return (< >
